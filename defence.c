@@ -149,9 +149,10 @@ void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *pa
 	while (token) {
 		if (c == 3) {
 			u_char index = atoi(token);
-			ip_list[index]->count++;
-			ip_list[index]->arrival_time = (double)clock() / (double)CLOCKS_PER_SEC;
+	
 			printf("index = %d, count = %d, arrival_time = %f\n", index, ip_list[index]->count, ip_list[index]->arrival_time);
+
+			ip_update (ip_list, index, inet_ntoa(ip->ip_src));
 		}
 		token = strtok(NULL, ".");
     		c++;

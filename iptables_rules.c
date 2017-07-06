@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include <string.h>
-#include <libiptc/libiptc.h>
+
      
 static int insert_rule (const char *table,
                  const char *chain, 
@@ -64,7 +64,7 @@ static int insert_rule (const char *table,
      
     return ret;
 }
-     
+     /*
 int main (int argc, char **argv) {
     unsigned int a, b;
      
@@ -79,4 +79,4 @@ int main (int argc, char **argv) {
                    1,
                    "REJECT");
     return 0;
-}
+} */
