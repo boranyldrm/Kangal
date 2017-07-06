@@ -13,15 +13,19 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include "ip_container.h"
 
 /* default snap length (maximum bytes per packet to capture) */
 #define SNAP_LEN 1518
 
-/* ethernet headers are always exactly 14 bytes [1] */
+/* ethernet headers are always exactly 14 bytes */
 #define SIZE_ETHERNET 14
 
 /* Ethernet addresses are 6 bytes */
 #define ETHER_ADDR_LEN	6
+
+/*ip container structure definition*/
+struct **IP_entry ip_list;
 
 /* Ethernet header */
 struct sniff_ethernet {
@@ -58,7 +62,7 @@ struct sniff_tcp {
         tcp_seq th_seq;                 /* sequence number */
         tcp_seq th_ack;                 /* acknowledgement number */
         u_char  th_offx2;               /* data offset, rsvd */
-#define TH_OFF(th)      (((th)->th_offx2 & 0xf0) >> 4)
+		#define TH_OFF(th)      (((th)->th_offx2 & 0xf0) >> 4)
         u_char  th_flags;
         #define TH_FIN  0x01
         #define TH_SYN  0x02
@@ -136,6 +140,22 @@ void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *pa
 
 	if (ip->ip_p != IPPROTO_TCP)	/* Altough filter just bring TCP check one more time for TCP */
 		return;
+
+	/*get the last octet of the host ip with token*/
+	char ipsrc_tmp[16];
+	strcpy(ipsrc_tmp, "10.20.40.1");
+	char* token = strtok(ipsrc_tmp, ".");
+	u_char count = 0;
+	while (token) {
+		if (count == 3) {
+			u_char index = atoi(token);
+			ip_list[index]->count++;
+			ip_list[index]->arrival_time = (double)clock() / (double)CLOCKS_PER_SEC;
+			printf("index = %d, count = %d, arrival_time = %f\n", index, ip_list[index]->count, ip_list[index]->arrival_time);
+		}
+		token = strtok(NULL, ".");
+    	count++;
+	}
 	
 	printf("   Protocol: TCP\n");
 
@@ -172,6 +192,8 @@ int main(int argc, char **argv) {
 	bpf_u_int32 mask;			/* subnet mask */
 	bpf_u_int32 net;			/* ip */
 	int num_packets = 0;			/* number of packets to capture */
+
+	ip_list = ip_init();	/* ip list initialization*/
 
 	print_app_banner();
 
