@@ -1,6 +1,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <sys/types.h>
+#include "iptables_rules.h"
 
 
 #ifndef IP_ENTRY_H

@@ -1,5 +1,4 @@
 #include "ip_container.h"
-#include "iptabels_rules.h"
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
@@ -20,7 +19,7 @@ struct IP_entry** ip_init () {
 void ip_update (struct IP_entry **ip_list, u_char index, char* source_ip) {
 	ip_list[index]->count++;
 	ip_list[index]->arrival_time = (double)clock() / (double)CLOCKS_PER_SEC;
-	
+
 	if (ip_list[index]->count >= 50) {
 		unsigned int a, b;
      

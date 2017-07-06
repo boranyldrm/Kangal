@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <errno.h>
 #include <string.h>
+#include "iptables_rules.h"
 
      
-static int insert_rule (const char *table,
+int insert_rule (const char *table,
                  const char *chain, 
                  unsigned int src,
                  int inverted_src,
