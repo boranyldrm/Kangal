@@ -16,6 +16,8 @@ struct IP_entry** ip_init () {
 	return ip_tmp;
 }
 
+// iptables -A INPUT -s 65.55.44.100 -j DROP
+
 /*
 int main() {
 	struct IP_entry** ip_list = ip_init();

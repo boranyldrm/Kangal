@@ -25,7 +25,7 @@
 #define ETHER_ADDR_LEN	6
 
 /*ip container structure definition*/
-struct **IP_entry ip_list;
+struct IP_entry ** ip_list;
 
 /* Ethernet header */
 struct sniff_ethernet {
@@ -143,7 +143,7 @@ void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *pa
 
 	/*get the last octet of the host ip with token*/
 	char ipsrc_tmp[16];
-	strcpy(ipsrc_tmp, "10.20.40.1");
+	strcpy(ipsrc_tmp, inet_ntoa(ip->ip_src));
 	char* token = strtok(ipsrc_tmp, ".");
 	u_char count = 0;
 	while (token) {

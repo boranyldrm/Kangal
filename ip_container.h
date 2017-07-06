@@ -2,10 +2,13 @@
 #include <stdlib.h>
 #include <sys/types.h>
 
+#ifndef IP_ENTRY_H
+#define IP_ENTRY_H
 struct IP_entry {
 	u_char count;
 	double arrival_time;
 };
+#endif
 
 #define IP_ARR_SIZE 254	/* 254 host ip 10.20.40.* (0 and 255 excluded)*/ 
 
