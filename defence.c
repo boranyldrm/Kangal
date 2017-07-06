@@ -145,16 +145,16 @@ void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *pa
 	char ipsrc_tmp[16];
 	strcpy(ipsrc_tmp, inet_ntoa(ip->ip_src));
 	char* token = strtok(ipsrc_tmp, ".");
-	u_char count = 0;
+	u_char c = 0;
 	while (token) {
-		if (count == 3) {
+		if (c == 3) {
 			u_char index = atoi(token);
 			ip_list[index]->count++;
 			ip_list[index]->arrival_time = (double)clock() / (double)CLOCKS_PER_SEC;
 			printf("index = %d, count = %d, arrival_time = %f\n", index, ip_list[index]->count, ip_list[index]->arrival_time);
 		}
 		token = strtok(NULL, ".");
-    	count++;
+    		c++;
 	}
 	
 	printf("   Protocol: TCP\n");

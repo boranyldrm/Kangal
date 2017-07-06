@@ -68,7 +68,7 @@ static int insert_rule (const char *table,
 int main (int argc, char **argv) {
     unsigned int a, b;
      
-    inet_pton (AF_INET, "10.20.50.40", &a);
+    inet_pton (AF_INET, "10.20.50.198", &a);
     inet_pton (AF_INET, "10.20.40.31", &b);
      
     insert_rule ("filter",
