@@ -8,7 +8,7 @@
 struct IP_timestamp {
 	long int sec;
 	long int usec;
-}
+};
 
 #ifndef IP_ENTRY_H
 #define IP_ENTRY_H

@@ -28,8 +28,8 @@ void ip_update (struct IP_entry **ip_list, u_char index, char* source_ip, long i
 
 	printf("26. satir %li\n", curr->sec);
 	printf("27. satir %li\n", next.sec);
-	if ( (curr->sec - next->sec) < 3 ) {
-		printf("29. satir%li\n", cur->sec);
+	if ( (curr->sec - next.sec) < 3 ) {
+		printf("29. satir%li\n", curr->sec);
 	}
 
 
@@ -61,6 +61,7 @@ void ip_update (struct IP_entry **ip_list, u_char index, char* source_ip, long i
     	//ip_list[index]->count = 0;
     	ip_list[index]->is_rejected = 1;
 	}
+
 	(ip_list[index]->ts_index)++;
 	(ip_list[index]->ts_index) %= 50;
 }
