@@ -39,7 +39,7 @@ void ip_update (struct IP_entry **ip_list, u_char index, char* source_ip) {
                    "REJECT");
         */
 
-        char iptables_systemcall[] = "iptables -t filter -A INPUT -s " + source_ip + "  -j REJECT --reject-with tcp-reset";
+        char iptables_systemcall[] = "iptables -t filter -A INPUT -s " + itoa(source_ip) + "  -j REJECT --reject-with tcp-reset";
 
     	system(iptables_systemcall);
 
