@@ -1,6 +1,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <sys/types.h>
+#include <stdint.h>
 #include "iptables_rules.h"
 
 
@@ -8,7 +9,8 @@
 #define IP_ENTRY_H
 struct IP_entry {
 	u_char count;
-	double arrival_time;
+	int32_t timestamps[50];
+	u_char ts_index;
 	u_char is_rejected;	/*if the ip is rejected then 1, not rejected 0, blacklist -1 */
 };
 #endif
@@ -22,6 +24,6 @@ struct IP_entry** ip_init ();
 void ip_reset (struct IP_entry **ip_list, u_char index);
 
 /* update the entry values  in the specific index*/
-void ip_update (struct IP_entry **ip_list, u_char index, char* source_ip);
+void ip_update (struct IP_entry **ip_list, u_char index, char* source_ip, int32_t time);
 
 void ip_free (struct IP_entry **ip_list);

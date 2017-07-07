@@ -10,16 +10,25 @@ struct IP_entry** ip_init () {
 	for (int i = 1; i <= IP_ARR_SIZE; ++i) {
 		ip_tmp[i] = malloc(sizeof(struct IP_entry));
 		ip_tmp[i]->count = 0;
-		ip_tmp[i]->arrival_time = 0;
+		ip_tmp[i]->ts_index = 0;
 		ip_tmp[i]->is_rejected = 0;
 	}
 
 	return ip_tmp;
 }
 
-void ip_update (struct IP_entry **ip_list, u_char index, char* source_ip) {
+void ip_update (struct IP_entry **ip_list, u_char index, char* source_ip, int32_t time) {
 	ip_list[index]->count++;
-	ip_list[index]->arrival_time = (double)clock() / (double)CLOCKS_PER_SEC;
+	ip_list[index]->timestaps[ip_list[index]->ts_index] = time;
+	(ip_list[index]->ts_index)++;
+	(ip_list[index]->ts_index) %= 50;
+
+	printf("26. satir%d\n", ip_list[index]->timestaps[ip_list[index]->ts_index]);
+	printf("27. satir%d\n", i(ip_list[index]->timestaps[((ip_list[index]->ts_index) + 1) % 50]));
+	if ( ((ip_list[index]->timestaps[ip_list[index]->ts_index]) - (ip_list[index]->timestaps[((ip_list[index]->ts_index) + 1) % 50])) < 3 ) {
+		printf("29. satir%d\n", ip_list[index]->timestaps[ip_list[index]->ts_index]);
+	}
+
 
 	/* if already rejected not enter*/
 	if (ip_list[index]->is_rejected == 0 && ip_list[index]->count >= 50) {
@@ -39,7 +48,10 @@ void ip_update (struct IP_entry **ip_list, u_char index, char* source_ip) {
                    "REJECT");
         */
 
-        char iptables_systemcall[] = "iptables -t filter -A INPUT -s " + itoa(source_ip) + "  -j REJECT --reject-with tcp-reset";
+
+        char iptables_systemcall[] = "iptables -t filter -A INPUT -s ";
+        strcat(iptables_systemcall, source_ip);
+        strcat(iptables_systemcall, " -j REJECT --reject-with tcp-reset");
 
     	system(iptables_systemcall);
 
