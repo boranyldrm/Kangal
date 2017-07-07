@@ -152,8 +152,8 @@ void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *pa
 	
 			printf("index = %d, count = %d\n", index, ip_list[index]->count);
 
-			//printf("ts.tvsec: %d\n", header->ts.tv_sec);
-			ip_update (ip_list, index, inet_ntoa(ip->ip_src), header->ts.tv_sec);
+			//printf("ts.tvsec: %li\n", header->ts.tv_sec);
+			ip_update (ip_list, index, inet_ntoa(ip->ip_src), header->ts.tv_sec, header->ts.u_sec);
 		}
 		token = strtok(NULL, ".");
     	c++;

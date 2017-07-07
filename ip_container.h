@@ -24,6 +24,6 @@ struct IP_entry** ip_init ();
 void ip_reset (struct IP_entry **ip_list, u_char index);
 
 /* update the entry values  in the specific index*/
-void ip_update (struct IP_entry **ip_list, u_char index, char* source_ip, long int time);
+void ip_update (struct IP_entry **ip_list, u_char index, char* source_ip, long int sec, long int usec);
 
 void ip_free (struct IP_entry **ip_list);

@@ -17,16 +17,14 @@ struct IP_entry** ip_init () {
 	return ip_tmp;
 }
 
-void ip_update (struct IP_entry **ip_list, u_char index, char* source_ip, long int time) {
+void ip_update (struct IP_entry **ip_list, u_char index, char* source_ip, long int sec, long int usec) {
 	ip_list[index]->count++;
-	ip_list[index]->timestamps[ip_list[index]->ts_index] = time;
-	(ip_list[index]->ts_index)++;
-	(ip_list[index]->ts_index) %= 50;
+	ip_list[index]->timestamps[ip_list[index]->ts_index] = sec;
 
-	printf("26. satir%d\n", ip_list[index]->timestamps[ip_list[index]->ts_index]);
-	printf("27. satir%d\n", (ip_list[index]->timestamps[((ip_list[index]->ts_index) + 1) % 50]));
+	printf("26. satir %li\n", ip_list[index]->timestamps[ip_list[index]->ts_index]);
+	printf("27. satir %li\n", (ip_list[index]->timestamps[((ip_list[index]->ts_index) + 1) % 50]));
 	if ( ((ip_list[index]->timestamps[ip_list[index]->ts_index]) - (ip_list[index]->timestamps[((ip_list[index]->ts_index) + 1) % 50])) < 3 ) {
-		printf("29. satir%d\n", ip_list[index]->timestamps[ip_list[index]->ts_index]);
+		printf("29. satir%li\n", ip_list[index]->timestamps[ip_list[index]->ts_index]);
 	}
 
 
@@ -58,6 +56,8 @@ void ip_update (struct IP_entry **ip_list, u_char index, char* source_ip, long i
     	//ip_list[index]->count = 0;
     	ip_list[index]->is_rejected = 1;
 	}
+	(ip_list[index]->ts_index)++;
+	(ip_list[index]->ts_index) %= 50;
 }
 
 void ip_free(struct IP_entry **ip_list) {
