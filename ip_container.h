@@ -9,6 +9,7 @@
 struct IP_entry {
 	u_char count;
 	double arrival_time;
+	u_char is_rejected;	/*if the ip is rejected then 1, not rejected 0, blacklist -1 */
 };
 #endif
 
@@ -22,3 +23,5 @@ void ip_reset (struct IP_entry **ip_list, u_char index);
 
 /* update the entry values  in the specific index*/
 void ip_update (struct IP_entry **ip_list, u_char index, char* source_ip);
+
+void ip_free (struct IP_entry **ip_list);

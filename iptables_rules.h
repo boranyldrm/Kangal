@@ -7,3 +7,5 @@ int insert_rule (const char *table,
                  unsigned int dest,
                  int inverted_dst,
                  const char *target);
+
+void flush_table (const char *table, const char *chain);

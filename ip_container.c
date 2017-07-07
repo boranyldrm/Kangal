@@ -11,6 +11,7 @@ struct IP_entry** ip_init () {
 		ip_tmp[i] = malloc(sizeof(struct IP_entry));
 		ip_tmp[i]->count = 0;
 		ip_tmp[i]->arrival_time = 0;
+		ip_tmp[i]->is_rejected = 0;
 	}
 
 	return ip_tmp;
@@ -20,7 +21,8 @@ void ip_update (struct IP_entry **ip_list, u_char index, char* source_ip) {
 	ip_list[index]->count++;
 	ip_list[index]->arrival_time = (double)clock() / (double)CLOCKS_PER_SEC;
 
-	if (ip_list[index]->count >= 50) {
+	/* if already rejected not enter*/
+	if (ip_list[index]->is_rejected == 0 && ip_list[index]->count >= 50) {
 		unsigned int a, b;
      
     	inet_pton (AF_INET, source_ip, &a);
@@ -33,7 +35,20 @@ void ip_update (struct IP_entry **ip_list, u_char index, char* source_ip) {
                    b,
                    1,
                    "REJECT");
+
+    	ip_list[index]->count = 0;
+    	ip_list[index]->is_rejected = 1;
 	}
+}
+
+void ip_free(struct IP_entry **ip_list) {
+	if (ip_list) {
+		for (int i = 0; i < IP_ARR_SIZE; ++i) {
+			free(ip_list[i]);
+		}
+		free(ip_list);
+	}
+	
 }
 
 // iptables -A INPUT -s 65.55.44.100 -j DROP

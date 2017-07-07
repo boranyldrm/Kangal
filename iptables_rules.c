@@ -48,7 +48,7 @@ int insert_rule (const char *table,
             entry.entry.ip.invflags |= IPT_INV_DSTIP;
     }
      
-    if (!iptc_append_entry (chain, (struct ipt_entry *) &entry, h)){
+    if (!iptc_append_entry (chain, (struct ipt_entry *) &entry, h)) {
         fprintf (stderr, "Could not insert a rule in iptables (table %s): %s\n", table, iptc_strerror (errno));
         goto out;
     }
@@ -65,7 +65,20 @@ int insert_rule (const char *table,
      
     return ret;
 }
-     /*
+
+void flush_table (const char *table, const char *chain) {
+    struct xtc_handle *h;
+    h = iptc_init (table);
+    if (!h) {
+        fprintf (stderr, "Could not init IPTC library: %s\n", iptc_strerror (errno));
+        return;
+    }
+
+    iptc_flush_entries(chain, h);
+}
+
+
+/*
 int main (int argc, char **argv) {
     unsigned int a, b;
      

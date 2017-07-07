@@ -155,7 +155,7 @@ void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *pa
 			ip_update (ip_list, index, inet_ntoa(ip->ip_src));
 		}
 		token = strtok(NULL, ".");
-    		c++;
+    	c++;
 	}
 	
 	printf("   Protocol: TCP\n");
@@ -178,6 +178,8 @@ void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *pa
 	printf("   Src port: %d\n", ntohs(tcp->th_sport));
 	printf("   Dst port: %d\n", ntohs(tcp->th_dport));
 	printf("   TCP Flag: %d\n", ntohs(tcp->th_flags));
+	printf("   sequence: %d\n", ntohs(tcp->th_seq));
+	printf("   ack no: %d\n", ntohs(tcp->th_ack));
 
 	return;
 }
@@ -249,6 +251,7 @@ int main(int argc, char **argv) {
 	/* cleanup */
 	pcap_freecode(&fp);
 	pcap_close(handle);
+	ip_free(ip_list);
 
 	printf("\nCapture complete.\n");
 
