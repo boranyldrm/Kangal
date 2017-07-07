@@ -56,7 +56,7 @@ void ip_update (struct IP_entry **ip_list, u_char index, char* source_ip, long i
         strcat(iptables_systemcall, source_ip);
         strcat(iptables_systemcall, " -j REJECT --reject-with tcp-reset");
 
-    	system(iptables_systemcall);
+    	//system(iptables_systemcall);
 
     	//ip_list[index]->count = 0;
     	ip_list[index]->is_rejected = 1;
