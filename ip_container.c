@@ -23,11 +23,13 @@ void ip_update (struct IP_entry **ip_list, u_char index, char* source_ip) {
 
 	/* if already rejected not enter*/
 	if (ip_list[index]->is_rejected == 0 && ip_list[index]->count >= 50) {
+		/*
 		unsigned int a, b;
      
     	inet_pton (AF_INET, source_ip, &a);
     	inet_pton (AF_INET, "10.20.40.31", &b);
-     
+     	
+     	
     	insert_rule ("filter",
                    "INPUT",
                    a,
@@ -35,6 +37,11 @@ void ip_update (struct IP_entry **ip_list, u_char index, char* source_ip) {
                    b,
                    1,
                    "REJECT");
+        */
+
+        char iptables_systemcall[] = "iptables -t filter -A INPUT -s " + source_ip + "  -j REJECT --reject-with tcp-reset";
+
+    	system(iptables_systemcall);
 
     	ip_list[index]->count = 0;
     	ip_list[index]->is_rejected = 1;
