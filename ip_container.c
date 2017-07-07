@@ -17,14 +17,14 @@ struct IP_entry** ip_init () {
 	return ip_tmp;
 }
 
-void ip_update (struct IP_entry **ip_list, u_char index, char* source_ip, int32_t time) {
+void ip_update (struct IP_entry **ip_list, u_char index, char* source_ip, long int time) {
 	ip_list[index]->count++;
-	ip_list[index]->timestaps[ip_list[index]->ts_index] = time;
+	ip_list[index]->timestamps[ip_list[index]->ts_index] = time;
 	(ip_list[index]->ts_index)++;
 	(ip_list[index]->ts_index) %= 50;
 
 	printf("26. satir%d\n", ip_list[index]->timestamps[ip_list[index]->ts_index]);
-	printf("27. satir%d\n", i(ip_list[index]->timestamps[((ip_list[index]->ts_index) + 1) % 50]));
+	printf("27. satir%d\n", (ip_list[index]->timestamps[((ip_list[index]->ts_index) + 1) % 50]));
 	if ( ((ip_list[index]->timestamps[ip_list[index]->ts_index]) - (ip_list[index]->timestamps[((ip_list[index]->ts_index) + 1) % 50])) < 3 ) {
 		printf("29. satir%d\n", ip_list[index]->timestamps[ip_list[index]->ts_index]);
 	}
