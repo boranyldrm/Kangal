@@ -19,12 +19,17 @@ struct IP_entry** ip_init () {
 
 void ip_update (struct IP_entry **ip_list, u_char index, char* source_ip, long int sec, long int usec) {
 	ip_list[index]->count++;
-	ip_list[index]->timestamps[ip_list[index]->ts_index] = sec;
+	u_char curr_index = ip_list[index]->ts_index;
+	struct IP_timestamp * curr = &(ip_list[index]->timestamps[curr_index]);
+	curr->sec = sec;
+	curr->usec = usec;
 
-	printf("26. satir %li\n", ip_list[index]->timestamps[ip_list[index]->ts_index]);
-	printf("27. satir %li\n", (ip_list[index]->timestamps[((ip_list[index]->ts_index) + 1) % 50]));
-	if ( ((ip_list[index]->timestamps[ip_list[index]->ts_index]) - (ip_list[index]->timestamps[((ip_list[index]->ts_index) + 1) % 50])) < 3 ) {
-		printf("29. satir%li\n", ip_list[index]->timestamps[ip_list[index]->ts_index]);
+	struct IP_timestamp next = ip_list[index]->timestamps[(curr_index + 1) % 50];
+
+	printf("26. satir %li\n", curr->sec);
+	printf("27. satir %li\n", next.sec);
+	if ( (curr->sec - next->sec) < 3 ) {
+		printf("29. satir%li\n", cur->sec);
 	}
 
 

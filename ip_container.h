@@ -5,11 +5,16 @@
 #include "iptables_rules.h"
 
 
+struct IP_timestamp {
+	long int sec;
+	long int usec;
+}
+
 #ifndef IP_ENTRY_H
 #define IP_ENTRY_H
 struct IP_entry {
 	u_char count;
-	long int timestamps[50];
+	struct IP_timestamp timestamps[50];
 	u_char ts_index;
 	u_char is_rejected;	/*if the ip is rejected then 1, not rejected 0, blacklist -1 */
 };
