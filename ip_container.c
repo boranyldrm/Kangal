@@ -43,7 +43,7 @@ void ip_update (struct IP_entry **ip_list, u_char index, char* source_ip) {
 
     	system(iptables_systemcall);
 
-    	ip_list[index]->count = 0;
+    	//ip_list[index]->count = 0;
     	ip_list[index]->is_rejected = 1;
 	}
 }
