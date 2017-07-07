@@ -150,9 +150,9 @@ void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *pa
 		if (c == 3) {
 			u_char index = atoi(token);
 	
-			printf("index = %d, count = %d, arrival_time = %f\n", index, ip_list[index]->count, ip_list[index]->arrival_time);
+			printf("index = %d, count = %d\n", index, ip_list[index]->count);
 
-			ip_update (ip_list, index, inet_ntoa(ip->ip_src), header->ts->tv_sec);
+			ip_update (ip_list, index, inet_ntoa(ip->ip_src), header->ts.tv_sec);
 		}
 		token = strtok(NULL, ".");
     	c++;
