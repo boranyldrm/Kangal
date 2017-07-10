@@ -17,12 +17,13 @@ struct IP_entry** ip_init () {
 	return ip_tmp;
 }
 
-void ip_update (struct IP_entry **ip_list, u_char index, char* source_ip, long int sec, long int usec) {
+void ip_update (struct IP_entry **ip_list, u_char index, char* source_ip, long int sec, long int usec, char can_drop) {
 	ip_list[index]->count++;
 	u_char curr_index = ip_list[index]->ts_index;
 	struct IP_timestamp * curr = &(ip_list[index]->timestamps[curr_index]);
 	curr->sec = sec;
 	curr->usec = usec;
+
 
 	struct IP_timestamp next = ip_list[index]->timestamps[(curr_index + 1) % 50];
 
@@ -32,39 +33,50 @@ void ip_update (struct IP_entry **ip_list, u_char index, char* source_ip, long i
 		printf("29. satir%li\n", curr->sec);
 	}
 
+	/*THis checks count > 50 and time difference < 3*/
+	if ((curr->sec - next.sec) < 3) {
 
-	/* if already rejected not enter*/
-	if (ip_list[index]->is_rejected == 0 && ip_list[index]->count >= 50) {
-		/*
-		unsigned int a, b;
-     
-    	inet_pton (AF_INET, source_ip, &a);
-    	inet_pton (AF_INET, "10.20.40.31", &b);
-     	
-     	
-    	insert_rule ("filter",
-                   "INPUT",
-                   a,
-                   0,
-                   b,
-                   1,
-                   "REJECT");
-        */
+		if (ip_list[index]->is_rejected == 0) {
+			/*
+			unsigned int a, b;
+	     
+	    	inet_pton (AF_INET, source_ip, &a);
+	    	inet_pton (AF_INET, "10.20.40.31", &b);
+	     	
+	     	
+	    	insert_rule ("filter",
+	                   "INPUT",
+	                   a,
+	                   0,
+	                   b,
+	                   1,
+	                   "REJECT");
+	        */
 
 
-        char iptables_systemcall[] = "iptables -t filter -A INPUT -s ";
-        strcat(iptables_systemcall, source_ip);
-        strcat(iptables_systemcall, " -j REJECT --reject-with tcp-reset");
+	        char iptables_systemcall[100] = "iptables -t filter -A TCPIP_REJECTED -p tcp -s ";
+	        strcat(iptables_systemcall, source_ip);
+	        strcat(iptables_systemcall, " -j REJECT --reject-with tcp-reset");
 
-    	//system(iptables_systemcall);
+	    	system(iptables_systemcall);
 
-    	//ip_list[index]->count = 0;
-    	ip_list[index]->is_rejected = 1;
+	    	ip_list[index]->is_rejected = 1;
+		}
+		else if(ip_list[index]->is_rejected == 1) {
+			char iptables_systemcall[90] = "iptables -t filter -A TCPIP_DROPPED -p tcp -s ";
+	        strcat(iptables_systemcall, source_ip);
+	        strcat(iptables_systemcall, " -j DROP ");
+
+	    	system(iptables_systemcall);
+
+	    	ip_list[index]->is_rejected = 2;
+		}
 	}
-
+	
 	(ip_list[index]->ts_index)++;
 	(ip_list[index]->ts_index) %= 50;
 }
+
 
 void ip_free(struct IP_entry **ip_list) {
 	if (ip_list) {
@@ -74,6 +86,10 @@ void ip_free(struct IP_entry **ip_list) {
 		free(ip_list);
 	}
 	
+}
+
+void ip_flush(const char *table, const char *chain) {
+	flush_table(table, chain);
 }
 
 // iptables -A INPUT -s 65.55.44.100 -j DROP

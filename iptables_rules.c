@@ -66,6 +66,7 @@ int insert_rule (const char *table,
     return ret;
 }
 
+
 void flush_table (const char *table, const char *chain) {
     struct xtc_handle *h;
     h = iptc_init (table);

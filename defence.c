@@ -13,6 +13,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <time.h>
 #include "ip_container.h"
 
 /* default snap length (maximum bytes per packet to capture) */
@@ -118,6 +119,9 @@ void print_app_usage(void) {
 void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *packet) {
 
 	static int count = 1;                   /* packet counter */
+
+	static clock_t table_round = clock();
+	static char ip_can_drop = 0;
 	
 	/* declare pointers to packet headers */
 	const struct sniff_ethernet *ethernet;  /* The ethernet header [1] */
@@ -126,6 +130,11 @@ void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *pa
 
 	int size_ip;
 	int size_tcp;
+
+	if (!ip_can_drop && (float)(clock() - table_round) / CLOCKS_PER_SEC >= 60.0 ) {
+		ip_flush("filter", "TCPIP_REJECTED");
+		ip_can_drop = 1;
+	}
 	
 	/* define ethernet header */
 	ethernet = (struct sniff_ethernet*)(packet);
@@ -153,7 +162,7 @@ void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *pa
 			printf("index = %d, count = %d\n", index, ip_list[index]->count);
 
 			//printf("ts.tvsec: %li\n", header->ts.tv_sec);
-			ip_update (ip_list, index, inet_ntoa(ip->ip_src), header->ts.tv_sec, header->ts.tv_usec);
+			ip_update (ip_list, index, inet_ntoa(ip->ip_src), header->ts.tv_sec, header->ts.tv_usec, ip_can_drop);
 		}
 		token = strtok(NULL, ".");
     	c++;
