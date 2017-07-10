@@ -30,6 +30,8 @@
 /*ip container structure definition*/
 struct IP_entry ** ip_list;
 
+static clock_t table_round;
+
 /* Ethernet header */
 struct sniff_ethernet {
         u_char  ether_dhost[ETHER_ADDR_LEN];    /* destination host address */
@@ -122,7 +124,7 @@ void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *pa
 
 	static int count = 1;                   /* packet counter */
 
-	static clock_t table_round = clock();
+	table_round = clock();
 	static char ip_can_drop = 0;
 	
 	/* declare pointers to packet headers */
