@@ -30,7 +30,7 @@
 /*ip container structure definition*/
 struct IP_entry ** ip_list;
 
-static clock_t table_round;
+static time_t table_round;
 
 /* Ethernet header */
 struct sniff_ethernet {
@@ -125,7 +125,7 @@ void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *pa
 	static int count = 1;                   /* packet counter */
 
 	if (count == 1) {
-		table_round = clock();
+		time(&table_round);
 	}
 
 	
@@ -139,8 +139,11 @@ void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *pa
 	int size_ip;
 	int size_tcp;
 
-	printf("%f\n", (float)(clock() - table_round) / CLOCKS_PER_SEC);
-	if (!ip_can_drop && (float)(clock() - table_round) / CLOCKS_PER_SEC >= 1.0 ) {
+	time_t curr_time;
+	time(&curr_time);
+
+	printf("%f\n", (float)(curr_time - table_round));
+	if (!ip_can_drop && (float)(curr_time - table_round) >= 3.0 ) {
 		ip_flush("filter", "TCPIP_REJECTED");
 		ip_can_drop = 1;
 	}
@@ -204,6 +207,13 @@ void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *pa
 }
 
 int main(int argc, char **argv) {
+
+	system("iptables -I INPUT --dport 22 -j ACCEPT");
+
+	system("iptables -N TCPIP_REJECTED");
+	system("iptables -N TCPIP_DROPPED");
+	system("iptables A INPUT -j TCPIP_REJECTED");
+	system("iptables A INPUT -j TCPIP_DROPPED");
 
 	char *dev = NULL;			/* capture device name */
 	char errbuf[PCAP_ERRBUF_SIZE];		/* error buffer */
