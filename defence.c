@@ -124,7 +124,7 @@ void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *pa
 
 	static int count = 1;                   /* packet counter */
 
-	table_round = clock();
+	
 	static char ip_can_drop = 0;
 	
 	/* declare pointers to packet headers */
@@ -135,7 +135,7 @@ void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *pa
 	int size_ip;
 	int size_tcp;
 
-	printf("%d\n", (float)(clock() - table_round) / CLOCKS_PER_SEC);
+	printf("%f\n", (float)(clock() - table_round) / CLOCKS_PER_SEC);
 	if (!ip_can_drop && (float)(clock() - table_round) / CLOCKS_PER_SEC >= 3.0 ) {
 		ip_flush("filter", "TCPIP_REJECTED");
 		ip_can_drop = 1;
@@ -260,6 +260,7 @@ int main(int argc, char **argv) {
 		exit(EXIT_FAILURE);
 	}
 
+	table_round = clock();
 	/* now we can set our callback function */
 	pcap_loop(handle, num_packets, got_packet, NULL);
 
