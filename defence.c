@@ -122,7 +122,7 @@ void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *pa
 
 	static int count = 1;                   /* packet counter */
 
-	static clock_t table_round = clock();
+	#define table_round clock()
 	static char ip_can_drop = 0;
 	
 	/* declare pointers to packet headers */
