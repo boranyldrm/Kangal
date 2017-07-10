@@ -33,8 +33,9 @@ void ip_update (struct IP_entry **ip_list, u_char index, char* source_ip, long i
 		printf("29. satir%li\n", curr->sec);
 	}
 
-	/*THis checks count > 50 and time difference < 3*/
+	/*This checks count > 50 and time difference < 3*/
 	if ((curr->sec - next.sec) < 3) {
+		printf("%d\n", (curr->sec - next.sec));
 
 		if (ip_list[index]->is_rejected == 0) {
 			/*
