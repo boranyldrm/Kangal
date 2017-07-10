@@ -27,15 +27,9 @@ void ip_update (struct IP_entry **ip_list, u_char index, char* source_ip, long i
 
 	struct IP_timestamp next = ip_list[index]->timestamps[(curr_index + 1) % 50];
 
-	printf("26. satir %li\n", curr->sec);
-	printf("27. satir %li\n", next.sec);
-	if ( (curr->sec - next.sec) < 3 ) {
-		printf("29. satir%li\n", curr->sec);
-	}
-
 	/*This checks count > 50 and time difference < 3*/
 	if ((curr->sec - next.sec) < 3) {
-		printf("%d\n", (curr->sec - next.sec));
+		printf("%li\n", (curr->sec - next.sec));
 
 		if (ip_list[index]->is_rejected == 0) {
 			/*
@@ -65,7 +59,7 @@ void ip_update (struct IP_entry **ip_list, u_char index, char* source_ip, long i
 
 	    	ip_list[index]->is_rejected = 1;
 		}
-		else if(ip_list[index]->is_rejected == 1) {
+		else if( can_drop && ip_list[index]->is_rejected == 1 ) {
 			char iptables_systemcall[90] = "iptables -t filter -A TCPIP_DROPPED -p tcp -s ";
 	        strcat(iptables_systemcall, source_ip);
 	        strcat(iptables_systemcall, " -j DROP ");
