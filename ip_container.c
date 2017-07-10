@@ -58,6 +58,8 @@ void ip_update (struct IP_entry **ip_list, u_char index, char* source_ip, long i
 	        strcat(iptables_systemcall, source_ip);
 	        strcat(iptables_systemcall, " -j REJECT --reject-with tcp-reset");
 
+	        printf("%s\n", iptables_systemcall);
+
 	    	system(iptables_systemcall);
 
 	    	ip_list[index]->is_rejected = 1;
@@ -66,6 +68,8 @@ void ip_update (struct IP_entry **ip_list, u_char index, char* source_ip, long i
 			char iptables_systemcall[90] = "iptables -t filter -A TCPIP_DROPPED -p tcp -s ";
 	        strcat(iptables_systemcall, source_ip);
 	        strcat(iptables_systemcall, " -j DROP ");
+
+	        printf("%s\n", iptables_systemcall);
 
 	    	system(iptables_systemcall);
 

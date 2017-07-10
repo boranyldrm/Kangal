@@ -16,6 +16,8 @@
 #include <time.h>
 #include "ip_container.h"
 
+//gcc -g -o exe defence.c ip_container.c iptables_rules.c -lpcap -liptc -lip4tc -lip6tc -ldl
+
 /* default snap length (maximum bytes per packet to capture) */
 #define SNAP_LEN 1518
 
