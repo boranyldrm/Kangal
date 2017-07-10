@@ -214,8 +214,14 @@ int main(int argc, char **argv) {
 
 	system("iptables -N TCPIP_REJECTED");
 	system("iptables -N TCPIP_DROPPED");
+
 	system("iptables -A INPUT -j TCPIP_REJECTED");
 	system("iptables -A INPUT -j TCPIP_DROPPED");
+	
+	system("iptables -F TCPIP_REJECTED");
+	system("iptables -F TCPIP_DROPPED");
+
+
 
 	char *dev = NULL;			/* capture device name */
 	char errbuf[PCAP_ERRBUF_SIZE];		/* error buffer */
