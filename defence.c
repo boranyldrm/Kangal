@@ -133,6 +133,7 @@ void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *pa
 	int size_ip;
 	int size_tcp;
 
+	printf("%li\n", (float)(clock() - table_round) / CLOCKS_PER_SEC);
 	if (!ip_can_drop && (float)(clock() - table_round) / CLOCKS_PER_SEC >= 3.0 ) {
 		ip_flush("filter", "TCPIP_REJECTED");
 		ip_can_drop = 1;
