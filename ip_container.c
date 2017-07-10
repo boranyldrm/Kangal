@@ -32,21 +32,6 @@ void ip_update (struct IP_entry **ip_list, u_char index, char* source_ip, long i
 		printf("%li\n", (curr->sec - next.sec));
 
 		if (ip_list[index]->is_rejected == 0) {
-			/*
-			unsigned int a, b;
-	     
-	    	inet_pton (AF_INET, source_ip, &a);
-	    	inet_pton (AF_INET, "10.20.40.31", &b);
-	     	
-	     	
-	    	insert_rule ("filter",
-	                   "INPUT",
-	                   a,
-	                   0,
-	                   b,
-	                   1,
-	                   "REJECT");
-	        */
 
 
 	        char iptables_systemcall[100] = "iptables -t filter -A TCPIP_REJECTED -p tcp -s ";
@@ -85,10 +70,6 @@ void ip_free(struct IP_entry **ip_list) {
 		free(ip_list);
 	}
 	
-}
-
-void ip_flush(const char *table, const char *chain) {
-	flush_table(table, chain);
 }
 
 // iptables -A INPUT -s 65.55.44.100 -j DROP

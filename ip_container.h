@@ -31,6 +31,3 @@ void ip_reset (struct IP_entry **ip_list, u_char index);
 void ip_update (struct IP_entry **ip_list, u_char index, char* source_ip, long int sec, long int usec, char can_drop);
 
 void ip_free (struct IP_entry **ip_list);
-
-/*An interface for iptables_rules.h flush_table()*/
-void ip_flush(const char *table, const char *chain);
