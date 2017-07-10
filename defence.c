@@ -144,7 +144,7 @@ void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *pa
 
 	printf("%f\n", (float)(curr_time - table_round));
 	if (!ip_can_drop && (float)(curr_time - table_round) >= 3.0 ) {
-		ip_flush("filter", "TCPIP_REJECTED");
+		system("iptables -F TCPIP_REJECTED");
 		ip_can_drop = 1;
 	}
 	
