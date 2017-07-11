@@ -16,7 +16,9 @@
 #include <time.h>
 #include "ip_container.h"
 
-//gcc -o exe defence.c ip_container.c -lpcap
+/* WARNING you can uncomment the printf functions for debug purpose
+	in the real time not uncomment them because when printing the system can miss some packets*/
+
 
 /* default snap length (maximum bytes per packet to capture) */
 #define SNAP_LEN 1518
@@ -30,6 +32,7 @@
 /*ip container structure definition*/
 struct IP_entry ** ip_list;
 
+/* table ronud for counting 1 minute for flushing the TCPIP_REJECTED chain*/
 static time_t table_round;
 
 /* Ethernet header */
@@ -118,17 +121,19 @@ void print_app_usage(void) {
 
 
 /*
- * dissect/print packet
+ * callback function for pcap_loop
+ * captures the TCP/IP packets 
  */
 void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *packet) {
 
 	static int count = 1;                   /* packet counter */
 
+	/* get the time of first packet */
 	if (count == 1) {
 		time(&table_round);
 	}
 
-	
+	// boolean value for start dropping (0 not drop, 1 drop)
 	static char ip_can_drop = 0;
 	
 	/* declare pointers to packet headers */
@@ -139,11 +144,9 @@ void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *pa
 	int size_ip;
 	int size_tcp;
 
-	time_t curr_time;
-	time(&curr_time);
-
-	printf("%f\n", (float)(curr_time - table_round));
-	if (!ip_can_drop && (float)(curr_time - table_round) >= 60.0 ) {
+	/* if 1 minutes pass from (current packet time - first packet time) and ip_can_drop == 0 
+		flush the TCPIP_REJECTED and set ip_can_drop 1*/
+	if ( (header->ts.tv_sec - table_round) >= 60 && !ip_can_drop ) {
 		system("iptables -F TCPIP_REJECTED");
 		ip_can_drop = 1;
 	}
@@ -159,7 +162,8 @@ void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *pa
 		return;
 	}
 
-	if (ip->ip_p != IPPROTO_TCP)	/* Altough filter just bring TCP check one more time for TCP */
+	/* Altough filter just bring TCP check one more time for TCP */
+	if (ip->ip_p != IPPROTO_TCP)	
 		return;
 
 	/*get the last octet of the host ip with token*/
@@ -168,26 +172,25 @@ void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *pa
 	char* token = strtok(ipsrc_tmp, ".");
 	u_char c = 0;
 	while (token) {
+		/* if last octet is reached*/
 		if (c == 3) {
+			/* index of entry array is host IP number (hash with host IP)*/
 			u_char index = atoi(token);
 	
-			printf("index = %d, count = %d\n", index, ip_list[index]->count);
-
-			//printf("ts.tvsec: %li\n", header->ts.tv_sec);
 			ip_update (ip_list, index, inet_ntoa(ip->ip_src), header->ts.tv_sec, header->ts.tv_usec, ip_can_drop);
 		}
 		token = strtok(NULL, ".");
     	c++;
 	}
 	
-	printf("   Protocol: TCP\n");
+	//printf("   Protocol: TCP\n");
 
-	printf("\nPacket number %d:\n", count);
+	//printf("\nPacket number %d:\n", count);
 	count++;
 
 	/* print source and destination IP addresses */
-	printf("       From: %s\n", inet_ntoa(ip->ip_src));
-	printf("         To: %s\n", inet_ntoa(ip->ip_dst));
+	//printf("       From: %s\n", inet_ntoa(ip->ip_src));
+	//printf("         To: %s\n", inet_ntoa(ip->ip_dst));
 	
 	/* define/compute tcp header offset */
 	tcp = (struct sniff_tcp*)(packet + SIZE_ETHERNET + size_ip);
@@ -197,27 +200,32 @@ void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *pa
 		return;
 	}
 	
-	printf("   Src port: %d\n", ntohs(tcp->th_sport));
-	printf("   Dst port: %d\n", ntohs(tcp->th_dport));
-	printf("   TCP Flag: %d\n", ntohs(tcp->th_flags));
-	printf("   sequence: %d\n", ntohs(tcp->th_seq));
-	printf("   ack no: %d\n", ntohs(tcp->th_ack));
+	//printf("   Src port: %d\n", ntohs(tcp->th_sport));
+	//printf("   Dst port: %d\n", ntohs(tcp->th_dport));
+	//printf("   TCP Flag: %d\n", ntohs(tcp->th_flags));
+	//printf("   sequence: %d\n", ntohs(tcp->th_seq));
+	//printf("   ack no: %d\n", ntohs(tcp->th_ack));
 
 	return;
 }
 
 int main(int argc, char **argv) {
 
+	/* flush the INPUT chain to prevent duplicate entries*/
 	system("iptables -F INPUT");
 
+	/* enable ssh port so if your IP is blocked from connection you can still connect to server with ssh*/
 	system("iptables -I INPUT -p tcp --dport 22 -j ACCEPT");
 
+	/*new chains for reject and drop*/
 	system("iptables -N TCPIP_REJECTED");
 	system("iptables -N TCPIP_DROPPED");
 
+	/* adding subchains to INPUT chain*/
 	system("iptables -A INPUT -j TCPIP_REJECTED");
 	system("iptables -A INPUT -j TCPIP_DROPPED");
 	
+	/* flush chains*/
 	system("iptables -F TCPIP_REJECTED");
 	system("iptables -F TCPIP_DROPPED");
 
@@ -227,7 +235,7 @@ int main(int argc, char **argv) {
 	char errbuf[PCAP_ERRBUF_SIZE];		/* error buffer */
 	pcap_t *handle;				/* packet capture handle */
 
-	char filter_exp[] = "dst host 10.20.40.31 and port 8080 and ip and (tcp[tcpflags] & (tcp-syn) != 0)";		/* filter expression [3] */
+	char filter_exp[] = "dst host 10.20.40.31 and port 8080 and ip and (tcp[tcpflags] & (tcp-syn) != 0)";		/* filter expression for pcap compile */
 	struct bpf_program fp;			/* compiled filter program (expression) */
 	bpf_u_int32 mask;			/* subnet mask */
 	bpf_u_int32 net;			/* ip */
