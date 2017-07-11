@@ -20,3 +20,9 @@ RUNNING THE TESTS
 * Be careful about the server's to which you attacked firewall subnetting protocols. For this code, we kept 10.20.50.0/24 as our subnet because our server was programmed to accept from only these IP addresses. You can edit/add more octets to your random IPs.
 * You can trace your SYN packets by tcpdump (Linux) or Wireshark.
 * Also you can specify SYN packets' quantity, duration through which they are sent. You only need to comment out necessary lines.
+
+VIDEOS
+------
+
+* For application videos, you can visit: [![Watch the SYN-Flood Attacking video]()](https://youtu.be/ciHMhSGKe7A)
+* For storage files' content, you can visit: [![Watch the Contents of interface and IPNumbers video]()](https://youtu.be/nTcuAT4HJQQ)
