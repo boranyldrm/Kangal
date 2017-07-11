@@ -9,7 +9,7 @@ TCP SYN-FLOOD ATTACKING CODE
 GETTING STARTED
 ---------------
 
-* Download this c file from https://github.com/boranyldrm/TCP-Syn-Flood-Defense. After compilation and running, you are supposed to enter interface name you are sending data through. (You can check yours via ipconfig (Windows users), ifconfig (Linux users), etc.)
+* Download this c file from https://github.com/boranyldrm/Kangal. After compilation and running, you are supposed to enter interface name you are sending data through. (You can check yours via ipconfig (Windows users), ifconfig (Linux users), etc.)
 * After that, enter IPv4 address you want to practice SYN-flood attack. (_Do not forget to conform standard IPv4 syntax: x.x.x.x_)
 * Enter destination port number. 
 * Hitting ENTER, attack begins...
