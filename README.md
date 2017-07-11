@@ -1,4 +1,4 @@
-# TCP Syn-Flood Atacking and Defending
+# TCP Syn-Flood Attacking and Defending
 
 
 ![alt text](https://github.com/boranyldrm/Kangal/blob/master/logo.png?raw=true)
