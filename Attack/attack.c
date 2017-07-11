@@ -16,6 +16,7 @@
 #include<time.h>	 //In case of using duration.
 #include<unistd.h>	 //To avoid unnecessary warnings after compilation 
 #include<arpa/inet.h>    //To avoid unnecessary warnings after compilation
+#include<ctype.h>
 
 struct pseudo_header    //needed for checksum calculation
 {
@@ -55,11 +56,12 @@ unsigned short csum(unsigned short *ptr,int nbytes) {
 
 //used for checking IP number's validity.
 int isInteger(char *str){
-    int flag=0;
     for(int i=0;i<strlen(str);i++){
-	if(isdigit(str[i]))flag=1;
+	if(isdigit(str[i])==0&&str[i]!='\n'){
+	   return 0;
+	}
     }
-    return flag;
+    return 1;
 }
 
 //checks if IP number is valid
