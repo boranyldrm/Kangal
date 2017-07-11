@@ -1,6 +1,7 @@
 ---TCP SYN-FLOOD ATTACKING CODE---
 
-*This project aims to create SYN packets with random source-IP numbers. *SYN packets are the first steps of a TCP-3-way handshake and by doing a SYN-flood attack, one can exhaust a server's sources and can block its data transmission. 
+*This project aims to create SYN packets with random source-IP numbers. 
+*SYN packets are the first steps of a TCP-3-way handshake and by doing a SYN-flood attack, one can exhaust a server's sources and can block its data transmission. 
 *Our code takes IP address and port number of the destination server which will be attacked. You can save your interface name on a .conf file for further developments. 
 *Finally, after attack, created random IP addresses will be stored in a text file for further examination.
 
