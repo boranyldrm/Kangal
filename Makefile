@@ -1,20 +1,22 @@
+#This is the makefile for attack.c program.
+#Typing 'make' or 'make attack' will create the executable file.
+
 COMPILER = gcc
 
-$(shell mkdir -p obj/)
-
-OUTS = obj/defence.o obj/ip_container.o
-TARGET = defence.exe
+OUTS = attack.c
+TARGET = exe
+AVOID_WARNINGS = -w
+STORE = IPNumbersCreated.txt interface.conf
 
 all:$(OUTS)
-	$(COMPILER) -o $(TARGET) $(OUTS) -lpcap
+	$(COMPILER) $(AVOID_WARNINGS) -o $(TARGET) $(OUTS)
 
-obj/defence.o:defence.c ip_container.h
-	$(COMPILER) -c defence.c -o obj/defence.o
+#Typing 'make run' runs the program.
+run:
+	sudo ./$(TARGET)
 
-obj/ip_container.o:ip_container.h
-	$(COMPILER) -c ip_container.c -o obj/ip_container.o
-
-clean:
-	rm -f obj/*.o
-	rmdir obj/
+#Typing 'make clean' cleans the variable files.
+clean: 
+	rm -f $(STORE)
 	rm -f $(TARGET)
+
