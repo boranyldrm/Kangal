@@ -1,5 +1,7 @@
 # TCP-Syn-Flood-Defense
 
+![alt text](https://github.com/boranyldrm/Kangal/blob/master/project_logo.jpeg?raw=true)
+
 The first group will develop a code capable of attacking a tcp syn flood as detailed below. The other group will try to block and log this attack with the code they have developed on a server that does not have the ability to edit the OS kernel. You can use the netfilter module of the kernel as the engine on the blocking side, or you can add rules to iptables itself. You can write the codes in a programming language that you feel comfortable with. Python and Java are suitable, Bash / Shell is not accepted, it is extra nice if written in C.
 
 
