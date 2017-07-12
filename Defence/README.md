@@ -20,3 +20,4 @@ RUNNING THE TESTS
 
 VIDEOS
 ------
+[Watch defence video.](https://youtu.be/IvrGVk4YCDs)
