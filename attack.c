@@ -219,10 +219,10 @@ while(1)
 
     //Uncomment in case of excluding a certain IP number from created IP addresses.
 
-    while(integerIP==222){
+/*  while(integerIP==222){
 	integerIP=1+(rand()%254);
     }
-
+*/
     //Adding created integer to source host address.
     int length = snprintf( NULL, 0, "%d", integerIP );
     char* str = malloc( length + 1 );
