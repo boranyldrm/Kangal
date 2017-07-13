@@ -80,9 +80,9 @@ void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *pa
 	static char ip_can_drop = 0;
 	
 	/* declare pointers to packet headers */
-	const struct sniff_ethernet *ethernet;  /* The ethernet header [1] */
-	const struct sniff_ip *ip;              /* The IP header */
-	const struct sniff_tcp *tcp;            /* The TCP header */
+	const struct ethernet_header *ethernet;  /* The ethernet header [1] */
+	const struct ip_header *ip;              /* The IP header */
+	const struct tcp_header *tcp;            /* The TCP header */
 
 	int size_ip;
 	int size_tcp;
@@ -95,10 +95,10 @@ void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *pa
 	}
 	
 	/* define ethernet header */
-	ethernet = (struct sniff_ethernet*)(packet);
+	ethernet = (struct ethernet_header*)(packet);
 	
 	/* define/compute ip header offset */
-	ip = (struct sniff_ip*)(packet + SIZE_ETHERNET);
+	ip = (struct ip_header*)(packet + SIZE_ETHERNET);
 	size_ip = IP_HL(ip)*4;
 	if (size_ip < 20) {
 		printf("   * Invalid IP header length: %u bytes\n", size_ip);
@@ -136,7 +136,7 @@ void got_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *pa
 	//printf("         To: %s\n", inet_ntoa(ip->ip_dst));
 	
 	/* define/compute tcp header offset */
-	tcp = (struct sniff_tcp*)(packet + SIZE_ETHERNET + size_ip);
+	tcp = (struct tcp_header*)(packet + SIZE_ETHERNET + size_ip);
 	size_tcp = TH_OFF(tcp)*4;
 	if (size_tcp < 20) {
 		printf("   * Invalid TCP header length: %u bytes\n", size_tcp);
