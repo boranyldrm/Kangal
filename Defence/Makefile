@@ -8,7 +8,7 @@ TARGET = defence.exe
 all:$(OUTS)
 	$(COMPILER) -o $(TARGET) $(OUTS) -lpcap
 
-obj/defence.o:defence.c ip_container.h
+obj/defence.o:defence.c ip_container.h ip_headers.h
 	$(COMPILER) -c defence.c -o obj/defence.o
 
 obj/ip_container.o:ip_container.h
