@@ -3,6 +3,7 @@
 #include <string.h>
 #include <arpa/inet.h>
 #include "../includes/lib_attack.h"
+#include <stdlib.h>
 
 #define ICMP_PACKET_SIZE 64
 
@@ -11,9 +12,10 @@ struct icmp_packet {
     u_char msg[ICMP_PACKET_SIZE - sizeof(struct icmp_header)];
 };
 
-/**************************************************************/
+int main(int argc, char const *argv[]) {
+    /**************************************************************/
 
- FILE *file=fopen("vlan_hopping_configuration.conf","r");
+    FILE *file=fopen("vlan_hopping_configuration.conf","r");
     char sourceIP[16];
     char sourceMAC[18];
     char sm1[4],sm2[4],sm3[4],sm4[4],sm5[4],sm6[4];
@@ -44,9 +46,9 @@ struct icmp_packet {
 	strcat(sms[i], tokenPtr);
 	tokenPtr=strtok(NULL, ":\n");
     }
+
 /**************************************************************/
 
-int main(int argc, char const *argv[]) {
     int packet_size = sizeof(struct vlan_ethernet_header) + sizeof(struct ip_header) + sizeof(struct icmp_packet);
 
     u_char *packet = malloc((size_t) packet_size);
