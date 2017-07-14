@@ -27,15 +27,15 @@ int main(int argc, char const *argv[]) {
     strncpy((char *)eth_hdr->ether_dhost, (const char *)tmp_dest_mac, ETHER_ADDR_LEN);
     strncpy((char *)eth_hdr->ether_shost, (const char *)tmp_src_mac, ETHER_ADDR_LEN);
 
-    eth_hdr->customer.tpid = 0x88A8;	// 802.1ad
+    eth_hdr->customer.tpid = 0x88A8;    // 802.1ad
     eth_hdr->customer.pcp_dei = 0;
     eth_hdr->customer.vid = 1;
 
-    eth_hdr->service.tpid = 0x8100;	// 802.1Q
+    eth_hdr->service.tpid = 0x8100; // 802.1Q
     eth_hdr->service.pcp_dei = 0;
     eth_hdr->service.vid = 100;
 
-    eth_hdr->ether_type = 0x0800;	/* IP type */
+    eth_hdr->ether_type = 0x0800;   /* IP type */
 
     ip_hdr->ip_vhl = (u_char)0x45;  /* version 4, length 5*/
     ip_hdr->ip_tos = 0;
