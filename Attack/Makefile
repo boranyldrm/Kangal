@@ -1,4 +1,3 @@
-
 SYN_EXE = ./SYN-Flood/exe
 VLAN_EXE = ./VLAN-Hopping/exe
 CFLAGS += -w
@@ -24,4 +23,5 @@ vlan_clean:
 	rm -f $(VLAN_EXE)
 
 clean:
-	rm -rf VLAN-Hopping/vlan_hopping.o SYN-Flood/syn_flood.o $(VLAN_EXE) $(SYN_EXE)
+	rm -rf $(VLAN_EXE) $(SYN_EXE) $(SYN_STORE)
+

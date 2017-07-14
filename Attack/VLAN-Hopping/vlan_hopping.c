@@ -7,7 +7,6 @@
 
 #define ICMP_PACKET_SIZE 64
 
-
 struct icmp_packet {
     struct icmp_header icmp_hdr;
     u_char msg[ICMP_PACKET_SIZE - sizeof(struct icmp_header)];
@@ -33,17 +32,17 @@ int main(int argc, char const *argv[]) {
     for(int i = 0; i <8 ; i++){
         fscanf(file,"%s",buff);
     }
+
     strcpy(sourceMAC, buff);
     sscanf(sourceMAC, "%x:%x:%x:%x:%x:%x", mac + 0, mac + 1, mac + 2, mac + 3, mac + 4, mac + 5);
     printf("Source MAC: %02X:%02X:%02X:%02X:%02X:%02X\n", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
     fclose(file);
-printf("size: %u\n", sizeof(struct vlan_tag_header));
+
     /**************************************************************/
     
     int packet_size = sizeof(struct vlan_ethernet_header) + sizeof(struct ip_header) + sizeof(struct icmp_packet);
     
     u_char *packet = calloc(1, (size_t) packet_size);
-    
     
     struct vlan_ethernet_header * eth_hdr = (struct vlan_ethernet_header *) packet;
     struct ip_header * ip_hdr = (struct ip_header *) (packet + sizeof(struct vlan_ethernet_header));
@@ -92,9 +91,10 @@ printf("size: %u\n", sizeof(struct vlan_tag_header));
     char *if_name=NULL;
     char pcap_errbuf[PCAP_ERRBUF_SIZE];
     pcap_errbuf[0]='\0';
- //   if_name=pcap_lookupdev(pcap_errbuf);
-if_name = "wlp2s0.1.100";
-printf("%s\n",if_name);
+    if_name=pcap_lookupdev(pcap_errbuf);
+
+    //if_name = "wlp2s0.1.100";
+    printf("Interface: %s\n",if_name);
     if (if_name == NULL) {
 	fprintf(stderr, "Couldn't find default device: %s\n", pcap_errbuf);
 	exit(EXIT_FAILURE);
@@ -109,12 +109,10 @@ printf("%s\n",if_name);
 
     // Write the Ethernet frame to the interface.
     if (pcap_inject(pcap,packet,packet_size)==-1) {
-	printf("boran\n");
         pcap_perror(pcap,0);
         pcap_close(pcap);
         exit(1);
     }
-
 
     // Close the PCAP descriptor.
     pcap_close(pcap);
