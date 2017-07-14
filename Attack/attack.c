@@ -18,6 +18,18 @@
 #include<arpa/inet.h>    //To avoid unnecessary warnings after compilation
 #include<ctype.h>
 #include<lib_attack.h>
+
+
+struct pseudo_header    //needed for checksum calculation
+{
+    unsigned int source_address;
+    unsigned int dest_address;
+    unsigned char placeholder;
+    unsigned char protocol;
+    unsigned short tcp_length;
+     
+    struct tcphdr tcp;
+};
  
 int main (void)
 {

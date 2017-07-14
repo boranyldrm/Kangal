@@ -2,19 +2,6 @@
 #include<string.h>
 #include<stdlib.h>
 #include<ctype.h>
-
-struct pseudo_header    //needed for checksum calculation
-{
-    unsigned int source_address;
-    unsigned int dest_address;
-    unsigned char placeholder;
-    unsigned char protocol;
-    unsigned short tcp_length;
-     
-    struct tcphdr tcp;
-};
-
-//checksum is needed for socket transmission. Sockets without checksum calculations are not accepted by destination.
  
 unsigned short csum(unsigned short *ptr,int nbytes) {
     register long sum;
