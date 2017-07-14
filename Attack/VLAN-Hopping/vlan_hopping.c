@@ -57,7 +57,7 @@ int main(int argc, char const *argv[]) {
     struct icmp_packet * icmp_pck = (struct icmp_packet *) (ip_hdr + sizeof(struct ip_header));
 
     u_char tmp_dest_mac[ETHER_ADDR_LEN] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
-    u_char tmp_src_mac[ETHER_ADDR_LEN] = {0x98, 0x01, 0xa7, 0x9f, 0x05, 0x13};
+    u_char tmp_src_mac[ETHER_ADDR_LEN] = {sm1, sm2, sm3, sm4, sm5, sm6};
 
     strncpy((char *)eth_hdr->ether_dhost, (const char *)tmp_dest_mac, ETHER_ADDR_LEN);
     strncpy((char *)eth_hdr->ether_shost, (const char *)tmp_src_mac, ETHER_ADDR_LEN);
