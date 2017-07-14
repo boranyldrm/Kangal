@@ -38,10 +38,8 @@ int main(int argc, char const *argv[]) {
 
     char *tokenPtr;
     tokenPtr=strtok(sourceMAC, ":\n");
-    strcpy(sms[0], "0x");
-    strcpy(sms[0], tokenPtr);
 
-    for(int i=1;i<6;i++){
+    for(int i=0;i<6;i++){
 	strcpy(sms[i], "0x");
 	strcat(sms[i], tokenPtr);
 	tokenPtr=strtok(NULL, ":\n");
@@ -97,10 +95,6 @@ int main(int argc, char const *argv[]) {
     strncpy(icmp_pck->msg, "Hello", ICMP_PACKET_SIZE - sizeof(struct icmp_header));
 
     icmp_pck->icmp_hdr.icmph_chksum = csum((unsigned short *) icmp_pck, sizeof(struct icmp_packet));
-
-
-    printf("%d\n", ip_hdr->ip_sum);
-    printf("%d\n", icmp_pck->icmp_hdr.icmph_chksum);
 
     return 0;
 }
