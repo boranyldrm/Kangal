@@ -27,7 +27,7 @@ int main(int argc, char const *argv[]) {
     strncpy((char *)eth_hdr->ether_dhost, (const char *)tmp_dest_mac, ETHER_ADDR_LEN);
     strncpy((char *)eth_hdr->ether_shost, (const char *)tmp_src_mac, ETHER_ADDR_LEN);
 
-    eth_hdr->customer.tpid = 0x88A8;    // 802.1ad
+    eth_hdr->customer.tpid = 0x8100;    // 802.1Q
     eth_hdr->customer.pcp_dei = 0;
     eth_hdr->customer.vid = 1;
 
