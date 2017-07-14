@@ -17,7 +17,7 @@
 #include<unistd.h>	 //To avoid unnecessary warnings after compilation 
 #include<arpa/inet.h>    //To avoid unnecessary warnings after compilation
 #include<ctype.h>
-#include<lib_attack.h>
+#include"lib_attack.h"
 
 
 struct pseudo_header    //needed for checksum calculation
@@ -58,7 +58,7 @@ int main (void)
 
 if(choice=='c'|choice=='C'){
     FILE *fp;
-    fp=fopen("configuration.conf","r");
+    fp=fopen("syn_flood_configuration.conf","r");
 
     char buff[50];
     char sdestPort[20];
