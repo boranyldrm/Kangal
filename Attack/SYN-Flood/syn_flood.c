@@ -17,7 +17,7 @@
 #include<unistd.h>	 //To avoid unnecessary warnings after compilation 
 #include<arpa/inet.h>    //To avoid unnecessary warnings after compilation
 #include<ctype.h>
-#include"lib_attack.h"
+#include"../includes/lib_attack.h"
 
 
 struct pseudo_header    //needed for checksum calculation
@@ -34,10 +34,10 @@ struct pseudo_header    //needed for checksum calculation
 int main (void)
 {
     FILE *file;		//To store created IP numbers.
-    file=fopen("IPNumbersCreated.txt","w");
+    file=fopen("./SYN-Flood/IPNumbersCreated.txt","w");
 
     FILE *interfaceFile;//To store interface knowledge.
-    interfaceFile=fopen("interface.conf","w");
+    interfaceFile=fopen("./SYN-Flood/interface.conf","w");
 
     int integerIP=67;	//To create random source IPs.
     char stringIP[3];
@@ -58,7 +58,7 @@ int main (void)
 
 if(choice=='c'|choice=='C'){
     FILE *fp;
-    fp=fopen("syn_flood_configuration.conf","r");
+    fp=fopen("./SYN-Flood/syn_flood_configuration.conf","r");
 
     char buff[50];
     char sdestPort[20];
