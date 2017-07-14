@@ -15,7 +15,7 @@ struct icmp_packet {
 int main(int argc, char const *argv[]) {
     /**************************************************************/
 
-    FILE *file=fopen("vlan_hopping_configuration.conf","r");
+    FILE *file=fopen("./VLAN-Hopping/vlan_hopping_configuration.conf","r");
     char sourceIP[16];
     char sourceMAC[18];
     char sm1[4],sm2[4],sm3[4],sm4[4],sm5[4],sm6[4];
