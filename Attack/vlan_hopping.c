@@ -1,14 +1,14 @@
-#include ../Defence/"ip_headers.h"
+#include "../Defence/ip_headers.h"
 #include <stdio.h>
 #include <string.h>
 #include <arpa/inet.h>
+#include <lib_attack.h>
 
-
+/*This code is written with the purpose of */
 int main(int argc, char const *argv[]) {
     int packet_size = sizeof(struct vlan_ethernet_header) + sizeof(struct ip_header) + sizeof(struct icmp_header);
 
     u_char *packet = malloc((size_t) packet_size);
-
 
     struct vlan_ethernet_header * eth_hdr = (struct vlan_ethernet_header *) packet;
     struct ip_header * ip_hdr = (struct ip_header *) (packet + sizeof(struct vlan_ethernet_header));
@@ -43,7 +43,7 @@ int main(int argc, char const *argv[]) {
 
 
     icmp_hdr->icmph_type = 8;   /* echo */
-    icmp_hdr->icmph_code = 0;
+    icmp_hdr->icmph_code = 0;	/*echo reply*/
     icmp_hdr->icmph_chksum = 0;
     icmp_hdr->icmph_ident = 0;
     icmp_hdr->icmph_seqnum = 0;
