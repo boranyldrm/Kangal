@@ -3,7 +3,7 @@ COMPILER = gcc
 SYN_CODE = ./SYN-Flood/syn_flood.c
 VLAN_CODE = ./VLAN-Hopping/vlan_hopping.c
 SYN_EXE = ./SYN-Flood/exe
-VLAN_EXE = ./VLAN/exe
+VLAN_EXE = ./VLAN-Hopping/exe
 AVOID_WARNINGS = -w
 SYN_STORE = ./SYN-Flood/IPNumbersCreated.txt ./SYN-Flood/interface.conf
 
