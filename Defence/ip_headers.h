@@ -1,3 +1,7 @@
+#include <stdlib.h>
+#include <netinet/in.h>
+#include <sys/types.h>
+
 /* default snap length (maximum bytes per packet to capture) */
 #define SNAP_LEN 1518
 
@@ -64,18 +68,27 @@ struct tcp_header {
 struct vlan_ethernet_header {
     u_char  ether_dhost[ETHER_ADDR_LEN];    /* destination host address */
     u_char  ether_shost[ETHER_ADDR_LEN];    /* source host address */
-
+	struct 	vlan_tag_header * customer;			
+	struct 	vlan_tag_header * service;
     u_short ether_type;                     /* IP? ARP? RARP? etc */
 };
 
+
 /* ICMP header */
 struct icmp_header {
- 	unsigned char      icmph_type;
- 	unsigned char      icmph_code;
- 	unsigned short int icmph_chksum;
+ 	u_char  icmph_type;
+ 	u_char  icmph_code;
+ 	u_short icmph_chksum;
  	/* The following data structures are ICMP type specific */
- 	unsigned short int icmph_ident;
- 	unsigned short int icmph_seqnum;
+ 	u_short icmph_ident;
+ 	u_short icmph_seqnum;
 }; /* total ICMP header length: 8 bytes (= 64 bits) */
+
+
+struct vlan_tag_header {
+	u_short	tpid;	/*Tag protocol identifier*/
+	u_char pcp_dei;	/* priority = 0 default, drop eligible = 0*/
+	u_short vid;	/*VLAN identifier*/
+};
 
 
