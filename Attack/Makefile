@@ -2,24 +2,24 @@ SYN_EXE = ./SYN-Flood/exe
 VLAN_EXE = ./VLAN-Hopping/exe
 CFLAGS += -w
 SYN_STORE = ./SYN-Flood/IPNumbersCreated.txt ./SYN-Flood/interface.conf
-
+ 
 syn: SYN-Flood/syn_flood.o
 	$(CC) -o $(SYN_EXE) $^
 
-syn_run:
+synrun:
 	sudo ./$(SYN_EXE)
 
-syn_clean: 
+synclean: 
 	rm -f $(SYN_STORE)
 	rm -f $(SYN_EXE)
 
 vlan: VLAN-Hopping/vlan_hopping.o
 	$(CC) -o $(VLAN_EXE) $^ -lpcap
 
-vlan_run:
+vlanrun:
 	sudo ./$(VLAN_EXE)
 
-vlan_clean:
+vlanclean:
 	rm -f $(VLAN_EXE)
 
 clean:

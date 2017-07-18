@@ -14,7 +14,7 @@ struct icmp_packet {
 
 
 int main(int argc, char const *argv[]) {
-    /**************************************************************/
+    /*This part takes source and destination IP and MAC addresses from conf file*/
     
     FILE *file = fopen("./VLAN-Hopping/vlan_hopping_configuration.conf", "r");
     char sourceIP[16];
@@ -35,7 +35,26 @@ int main(int argc, char const *argv[]) {
 
     strcpy(sourceMAC, buff);
     sscanf(sourceMAC, "%x:%x:%x:%x:%x:%x", mac + 0, mac + 1, mac + 2, mac + 3, mac + 4, mac + 5);
-    printf("Source MAC: %02X:%02X:%02X:%02X:%02X:%02X\n", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+    printf("Source MAC: %02X:%02X:%02X:%02X:%02X:%02X\n\n", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+
+    char destIP[16];
+    char destMAC[18];
+    unsigned char dmac[6];
+    
+    for(int i = 0; i < 8; i++){
+        fscanf(file, "%s", buff);
+    }
+    
+    strcpy(destIP, buff);
+    printf("Source IP: %s\n", destIP);
+    
+    for(int i = 0; i <8 ; i++){
+        fscanf(file,"%s",buff);
+    }
+
+    strcpy(destMAC, buff);
+    sscanf(destMAC, "%x:%x:%x:%x:%x:%x", dmac + 0, dmac + 1, dmac + 2, dmac + 3, dmac + 4, dmac + 5);
+    printf("Destination MAC: %02X:%02X:%02X:%02X:%02X:%02X\n", dmac[0], dmac[1], dmac[2], dmac[3], dmac[4], dmac[5]);
     fclose(file);
 
     /**************************************************************/
@@ -48,9 +67,9 @@ int main(int argc, char const *argv[]) {
     struct ip_header * ip_hdr = (struct ip_header *) (packet + sizeof(struct vlan_ethernet_header));
     struct icmp_packet * icmp_pck = (struct icmp_packet *) ((char *)ip_hdr + sizeof(struct ip_header));
     
-    u_char tmp_dest_mac[ETHER_ADDR_LEN] = {0x98, 0xe7, 0xf4, 0x66, 0x24, 0x7d};
+    //u_char tmp_dest_mac[ETHER_ADDR_LEN] = {0xe0, 0x3f, 0x49, 0xc7, 0xde, 0x8d};
     
-    memcpy((char *)eth_hdr->ether_dhost, (const char *)tmp_dest_mac, ETHER_ADDR_LEN);
+    memcpy((char *)eth_hdr->ether_dhost, (const char *)dmac, ETHER_ADDR_LEN);
     memcpy((char *)eth_hdr->ether_shost, (const char *)mac, ETHER_ADDR_LEN);
     
     eth_hdr->customer.tpid = htons(0x8100);	// 802.1Q
@@ -70,9 +89,9 @@ int main(int argc, char const *argv[]) {
     ip_hdr->ip_p = 1;   /*ICMP protocol*/
     ip_hdr->ip_sum = 0;
     ip_hdr->ip_src.s_addr = inet_addr(sourceIP);
-    ip_hdr->ip_dst.s_addr = inet_addr("192.168.1.10");
+    ip_hdr->ip_dst.s_addr = inet_addr(destIP);
     
-    printf("%d\n", ip_hdr->ip_len);
+    //printf("%d\n", ip_hdr->ip_len);  /*used for debugging checksum*/
     
     ip_hdr->ip_sum = csum((unsigned short *) (packet + sizeof(struct vlan_ethernet_header)), ntohs(ip_hdr->ip_len) >> 1);
     
