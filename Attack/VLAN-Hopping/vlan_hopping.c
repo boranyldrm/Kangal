@@ -48,18 +48,16 @@ int main(int argc, char const *argv[]) {
     struct ip_header * ip_hdr = (struct ip_header *) (packet + sizeof(struct vlan_ethernet_header));
     struct icmp_packet * icmp_pck = (struct icmp_packet *) ((char *)ip_hdr + sizeof(struct ip_header));
     
-    u_char tmp_dest_mac[ETHER_ADDR_LEN] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
+    u_char tmp_dest_mac[ETHER_ADDR_LEN] = {0x98, 0xe7, 0xf4, 0x66, 0x24, 0x7d};
     
     memcpy((char *)eth_hdr->ether_dhost, (const char *)tmp_dest_mac, ETHER_ADDR_LEN);
     memcpy((char *)eth_hdr->ether_shost, (const char *)mac, ETHER_ADDR_LEN);
     
-#ifndef DISABLE_VLAN
     eth_hdr->customer.tpid = htons(0x8100);	// 802.1Q
     eth_hdr->customer.pcp_vid = htons(1);
     
     eth_hdr->service.tpid = htons(0x8100);	// 802.1Q
     eth_hdr->service.pcp_vid = htons(100);
-#endif
     
     eth_hdr->ether_type = htons(0x0800);	/* IP type */
     
@@ -72,7 +70,7 @@ int main(int argc, char const *argv[]) {
     ip_hdr->ip_p = 1;   /*ICMP protocol*/
     ip_hdr->ip_sum = 0;
     ip_hdr->ip_src.s_addr = inet_addr(sourceIP);
-    ip_hdr->ip_dst.s_addr = inet_addr("255.255.255.255");
+    ip_hdr->ip_dst.s_addr = inet_addr("192.168.1.10");
     
     printf("%d\n", ip_hdr->ip_len);
     
