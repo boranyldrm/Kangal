@@ -16,3 +16,12 @@ Defending Group:
 ----------------
 
 The code will detect more than 50 Syn packets sent within 3 seconds of the same IP, reject these malicious ip addresses with TCP RST, log in or print stdout. After 1 minute, the IP addresses will be redirected to the white list, and if the attack continues, the IP address will be blocked forever in a file that will be added to the blacklist.
+
+EXTRA PROJECT
+-------------
+
+* Now, Vlan Double Tagging is available on /Attack folder. You can create an ICMP packet with double tags to spoof trunk ports to forward your packets through different vlans. You only need to specify source and destination MAC and IP addresses and VLAN ID numbers.
+
+* TO RUN SYN-FLOOD ATTACK, TYPE MAKE SYN / MAKE SYNRUN.
+    
+* TO RUN DOUBLE TAGGING, TYPE MAKE VLAN / MAKE VLANRUN.
