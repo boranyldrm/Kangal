@@ -81,10 +81,10 @@ struct vlan_tag_header {
 struct vlan_ethernet_header {
     u_char  ether_dhost[ETHER_ADDR_LEN];    /* destination host address */
     u_char  ether_shost[ETHER_ADDR_LEN];    /* source host address */
-
+#ifndef DISABLE_VLAN_HOPPING
     struct 	vlan_tag_header customer;
     struct 	vlan_tag_header service;
-
+#endif //DISABLE_VLAN_HOPPING
     u_short ether_type;                     /* IP? ARP? RARP? etc */
 } __attribute__((__packed__));
 
